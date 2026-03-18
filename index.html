@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FireDL[Beta] + Glowtham — Secure file hosting & professional photography portfolio by DevNameGelo">
+<title>FireDL[Beta] + Glowtham | by DevNameGelo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════════════════════ */
+:root {
+  --bg:       #05070f;
+  --bg2:      #080b16;
+  --bg3:      #0b0f1e;
+  --panel:    rgba(8,11,22,.92);
+  --card:     rgba(255,255,255,.028);
+  --card2:    rgba(255,255,255,.045);
+  --border:   rgba(255,255,255,.07);
+  --border2:  rgba(255,255,255,.12);
+  --cyan:     #00e5ff;
+  --cyan2:    rgba(0,229,255,.15);
+  --cyan3:    rgba(0,229,255,.06);
+  --purple:   #a855f7;
+  --purple2:  rgba(168,85,247,.15);
+  --pink:     #f72585;
+  --pink2:    rgba(247,37,133,.15);
+  --green:    #39ff14;
+  --text:     #e8edf8;
+  --text2:    #b0bace;
+  --muted:    #6e7a91;
+  --r:        11px;
+  --r2:       18px;
+  --nav:      66px;
+  --ease:     cubic-bezier(.4,0,.2,1);
+  --t:        .26s;
+  --font1:    'Orbitron', monospace;
+  --font2:    'Exo 2', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font2);background:var(--bg);color:var(--text);
+  overflow-x:hidden;min-height:100vh;
+}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--font2);background:none;border:none;color:inherit}
+input,textarea,select{font-family:var(--font2);color:var(--text);outline:none}
+img{display:block;max-width:100%;height:auto}
+ul{list-style:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--cyan),var(--purple));border-radius:4px}
+::selection{background:var(--cyan2);color:var(--text)}
+
+/* ═══════════════════════════════════════════════════════════
+   BACKGROUND GRID + SCANLINES
+═══════════════════════════════════════════════════════════ */
+#backdrop{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+#backdrop::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,255,.022) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+#backdrop::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,229,255,.045) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 40% at 85% 100%,rgba(168,85,247,.05) 0%,transparent 60%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;height:var(--nav);z-index:800;
+  background:rgba(5,7,15,.82);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);transition:box-shadow var(--t) var(--ease);
+}
+#nav.shadowed{box-shadow:0 2px 36px rgba(0,0,0,.7)}
+.nav-inner{
+  max-width:1360px;margin:0 auto;height:100%;
+  display:flex;align-items:center;padding:0 22px;gap:20px;
+}
+/* Brand */
+.brand{display:flex;align-items:baseline;gap:6px;flex-shrink:0;user-select:none;cursor:pointer}
+.b-fire{
+  font-family:var(--font1);font-size:.88rem;font-weight:700;letter-spacing:.5px;
+  color:var(--cyan);text-shadow:0 0 14px rgba(0,229,255,.7),0 0 28px rgba(0,229,255,.3);
+}
+.b-beta{font-size:.58rem;color:var(--pink);vertical-align:super;text-shadow:0 0 8px var(--pink)}
+.b-plus{color:var(--muted);font-size:.7rem;margin:0 1px}
+.b-glow{
+  font-family:var(--font1);font-size:.88rem;font-weight:700;letter-spacing:.5px;
+  color:var(--purple);text-shadow:0 0 14px rgba(168,85,247,.7),0 0 28px rgba(168,85,247,.3);
+}
+.b-by{font-size:.62rem;color:var(--muted);font-style:italic;align-self:center;margin-left:1px}
+/* Links */
+.nav-links{
+  display:flex;align-items:center;gap:2px;flex:1;justify-content:center;
+}
+.nl{
+  padding:6px 14px;border-radius:8px;font-size:.82rem;font-weight:500;
+  color:var(--muted);transition:all var(--t) var(--ease);cursor:pointer;
+  position:relative;letter-spacing:.2px;
+}
+.nl:hover{color:var(--text);background:var(--card2)}
+.nl.on{color:var(--text);background:var(--card2)}
+.nl.on::after{
+  content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  width:16px;height:2px;background:var(--cyan);border-radius:2px;
+  box-shadow:0 0 6px var(--cyan);
+}
+/* Auth */
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+#userPill{
+  display:none;align-items:center;gap:8px;
+  background:var(--card2);border:1px solid var(--border2);border-radius:20px;
+  padding:4px 12px 4px 10px;
+}
+#userPill .uname{font-size:.77rem;color:var(--cyan);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Hamburger */
+.burger{
+  display:none;flex-direction:column;gap:4px;padding:8px;margin-left:auto;
+  border-radius:7px;transition:background var(--t) var(--ease);
+}
+.burger:hover{background:var(--card2)}
+.burger span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px;transition:all var(--t) var(--ease)}
+.burger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+/* ═══════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════ */
+.btn-ghost{
+  padding:6px 16px;border:1px solid var(--border2);border-radius:8px;
+  font-size:.8rem;font-weight:500;color:var(--text2);
+  transition:all var(--t) var(--ease);
+}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.15)}
+.btn-glow{
+  padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:700;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;
+  position:relative;overflow:hidden;transition:all var(--t) var(--ease);
+}
+.btn-glow::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  transition:opacity var(--t) var(--ease);
+}
+.btn-glow:hover::before{opacity:1}
+.btn-glow:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,229,255,.3)}
+.btn-glow > *{position:relative;z-index:1}
+.btn-sm{
+  padding:3px 8px;border:1px solid var(--border);border-radius:5px;
+  font-size:.71rem;color:var(--muted);transition:all var(--t) var(--ease);
+}
+.btn-sm:hover{border-color:var(--pink);color:var(--pink)}
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 28px;border-radius:var(--r);font-weight:700;font-size:.92rem;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;
+  transition:all var(--t) var(--ease);letter-spacing:.3px;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,229,255,.38)}
+.btn-outline{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 28px;border-radius:var(--r);font-weight:600;font-size:.92rem;
+  border:1.5px solid var(--cyan);color:var(--cyan);
+  transition:all var(--t) var(--ease);letter-spacing:.3px;
+}
+.btn-outline:hover{background:var(--cyan2);transform:translateY(-2px);box-shadow:0 8px 26px rgba(0,229,255,.18)}
+.btn-block{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px;border-radius:var(--r);font-weight:700;font-size:.9rem;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));color:#000;
+  transition:all var(--t) var(--ease);
+}
+.btn-block:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 26px rgba(0,229,255,.32)}
+.btn-block:disabled{opacity:.55;cursor:not-allowed}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT FIELDS
+═══════════════════════════════════════════════════════════ */
+.field{
+  width:100%;padding:10px 14px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text);font-size:.86rem;transition:border-color var(--t) var(--ease);
+}
+.field:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.1)}
+.field.bad{border-color:var(--pink);box-shadow:0 0 0 2px rgba(247,37,133,.08)}
+textarea.field{resize:vertical;min-height:120px}
+.fgrp{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fgrp label{font-size:.8rem;color:var(--text2);font-weight:500}
+.fgrp label .req{color:var(--pink)}
+.errtxt{font-size:.7rem;color:var(--pink);display:none}
+.errtxt.show{display:block}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGES / ROUTER
+═══════════════════════════════════════════════════════════ */
+.page{display:none;min-height:calc(100vh - var(--nav));padding-top:var(--nav);position:relative;z-index:1}
+.page.active{display:block;animation:pgIn .35s var(--ease) both}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED SECTION STYLES
+═══════════════════════════════════════════════════════════ */
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+.sec{padding:88px 0}
+.shd{text-align:center;margin-bottom:56px}
+.stag{display:inline-block;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.stit{font-family:var(--font1);font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:700;line-height:1.18;margin-bottom:12px}
+.stit .hl{color:var(--cyan);text-shadow:0 0 16px rgba(0,229,255,.4)}
+.ssub{font-size:.9rem;color:var(--muted);line-height:1.8;max-width:500px;margin:0 auto}
+
+/* ═══════════════════════════════════════════════════════════
+   HOME / HERO
+═══════════════════════════════════════════════════════════ */
+#pg-home{display:none}
+#pg-home.active{display:flex;flex-direction:column}
+.hero{
+  min-height:calc(100vh - var(--nav));position:relative;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+/* Floating orbs */
+.orbs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.3;animation:orb-float 12s ease-in-out infinite}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,var(--cyan),transparent 65%);top:-140px;left:-120px;animation-delay:0s}
+.orb2{width:420px;height:420px;background:radial-gradient(circle,var(--purple),transparent 65%);bottom:-100px;right:-80px;animation-delay:-5s}
+.orb3{width:320px;height:320px;background:radial-gradient(circle,var(--pink),transparent 65%);top:45%;left:58%;animation-delay:-9s}
+@keyframes orb-float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(20px,-20px) scale(1.07)}
+  66%{transform:translate(-14px,16px) scale(.93)}
+}
+.hero-body{
+  position:relative;z-index:2;text-align:center;max-width:860px;
+  padding:60px 24px 40px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 18px;border:1px solid rgba(0,229,255,.35);border-radius:20px;
+  font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);
+  margin-bottom:28px;background:rgba(0,229,255,.05);
+  animation:fu .6s var(--ease) .05s both;
+}
+.hero-title{
+  font-family:var(--font1);font-size:clamp(2.2rem,6vw,4.8rem);
+  font-weight:900;line-height:1.05;margin-bottom:22px;
+  animation:fu .6s var(--ease) .12s both;
+}
+.gc{color:var(--cyan);text-shadow:0 0 24px rgba(0,229,255,.9),0 0 50px rgba(0,229,255,.35)}
+.gp{color:var(--purple);text-shadow:0 0 24px rgba(168,85,247,.9),0 0 50px rgba(168,85,247,.35)}
+.gpk{color:var(--pink);text-shadow:0 0 24px rgba(247,37,133,.9),0 0 50px rgba(247,37,133,.35)}
+.hero-sub{
+  font-size:1rem;color:var(--text2);line-height:1.82;margin-bottom:36px;max-width:600px;margin-left:auto;margin-right:auto;
+  animation:fu .6s var(--ease) .2s both;
+}
+.hero-sub strong{color:var(--text)}
+.hero-cta{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;
+  animation:fu .6s var(--ease) .28s both;
+}
+.hero-stats{
+  display:flex;align-items:center;justify-content:center;gap:24px;
+  animation:fu .6s var(--ease) .36s both;
+}
+.hs{display:flex;flex-direction:column;align-items:center;gap:2px}
+.hs-n{font-family:var(--font1);font-size:1.4rem;font-weight:700;color:var(--cyan);text-shadow:0 0 10px rgba(0,229,255,.5)}
+.hs-l{font-size:.66rem;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+.hs-div{width:1px;height:36px;background:var(--border)}
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  animation:fu .6s var(--ease) .44s both;
+}
+.sh-txt{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+.sh-arr{
+  width:16px;height:16px;border-right:1.5px solid var(--cyan);border-bottom:1.5px solid var(--cyan);
+  transform:rotate(45deg);animation:arr 1.7s ease-in-out infinite;
+}
+@keyframes arr{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════════════════════ */
+.about-grid{display:grid;grid-template-columns:340px 1fr;gap:64px;align-items:center}
+.about-img-wrap{position:relative}
+.about-img-border{
+  position:absolute;top:-12px;left:-12px;right:12px;bottom:12px;
+  border:1px solid rgba(0,229,255,.18);border-radius:var(--r2);pointer-events:none;
+}
+.about-img{
+  width:100%;aspect-ratio:1;border-radius:var(--r2);
+  background:linear-gradient(145deg,var(--bg2),var(--bg3));
+  border:1px solid var(--border);overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .4s var(--ease);
+}
+.about-img:hover{border-color:rgba(168,85,247,.4);box-shadow:0 0 40px rgba(168,85,247,.18)}
+.about-avatar{font-size:5rem;filter:drop-shadow(0 0 20px rgba(168,85,247,.4))}
+.about-xp-badge{
+  position:absolute;bottom:-14px;right:-14px;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  padding:9px 16px;border-radius:var(--r);font-size:.77rem;font-weight:700;color:#000;
+  box-shadow:0 4px 18px rgba(0,229,255,.3);
+}
+.about-txt h2{font-family:var(--font1);font-size:1.85rem;font-weight:700;margin-bottom:18px;line-height:1.2}
+.about-txt h2 span{color:var(--purple);text-shadow:0 0 14px rgba(168,85,247,.4)}
+.about-txt p{font-size:.88rem;color:var(--text2);line-height:1.88;margin-bottom:12px}
+.about-txt p strong{color:var(--text)}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.skill{
+  padding:4px 13px;border:1px solid var(--border);border-radius:20px;
+  font-size:.75rem;color:var(--muted);transition:all var(--t) var(--ease);cursor:default;
+}
+.skill:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 10px rgba(0,229,255,.12)}
+.socials{display:flex;gap:10px;margin-top:20px}
+.soc{
+  width:40px;height:40px;border:1px solid var(--border);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:all var(--t) var(--ease);
+}
+.soc:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-3px);box-shadow:0 5px 14px rgba(0,229,255,.18)}
+
+/* ═══════════════════════════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════════════════════════ */
+.gal-filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:36px}
+.gf{
+  padding:6px 18px;border:1px solid var(--border);border-radius:20px;
+  font-size:.79rem;color:var(--muted);background:var(--card);
+  cursor:pointer;transition:all var(--t) var(--ease);
+}
+.gf:hover,.gf.on{
+  border-color:var(--cyan);color:var(--cyan);
+  background:var(--cyan3);box-shadow:0 0 10px rgba(0,229,255,.1);
+}
+.gal-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.gi{
+  position:relative;border-radius:var(--r);overflow:hidden;cursor:pointer;
+  aspect-ratio:4/3;background:var(--bg2);border:1px solid var(--border);
+  transition:all .32s var(--ease);
+}
+.gi:hover{transform:scale(1.022);border-color:rgba(168,85,247,.35);box-shadow:0 0 24px rgba(168,85,247,.15)}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
+.gi:hover img{transform:scale(1.07)}
+.gi-ph{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;font-size:2.6rem;color:var(--muted);
+  background:linear-gradient(145deg,var(--bg2),var(--bg3));
+}
+.gi-ph span{font-size:.75rem;letter-spacing:1px;text-transform:uppercase;font-family:var(--font1)}
+.gi-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 52%);
+  opacity:0;transition:opacity var(--t) var(--ease);
+  display:flex;align-items:flex-end;padding:13px;
+}
+.gi:hover .gi-overlay{opacity:1}
+.gi-info h4{font-size:.83rem;font-weight:600;margin-bottom:2px}
+.gi-info span{font-size:.68rem;color:var(--cyan)}
+
+/* Lightbox */
+.lb{
+  position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.97);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
+.lb.open{opacity:1;pointer-events:all}
+.lb-box{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;max-width:90vw}
+.lb-img{max-width:100%;max-height:82vh;border-radius:var(--r);box-shadow:0 0 60px rgba(0,229,255,.15)}
+.lb-cap{font-size:.85rem;color:var(--text2)}
+.lb-x{
+  position:absolute;top:-36px;right:0;width:32px;height:32px;
+  border:1px solid var(--border2);border-radius:50%;background:var(--bg2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all var(--t) var(--ease);font-size:.85rem;
+}
+.lb-x:hover{border-color:var(--pink);color:var(--pink)}
+.lb-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border:1px solid var(--border2);border-radius:50%;
+  background:rgba(8,11,22,.8);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all var(--t) var(--ease);font-size:1.2rem;
+}
+.lb-nav:hover{border-color:var(--cyan);color:var(--cyan)}
+.lb-p{left:-56px}.lb-n{right:-56px}
+
+/* ═══════════════════════════════════════════════════════════
+   FIREDL SECTION
+═══════════════════════════════════════════════════════════ */
+.fdl-hdr{margin-bottom:32px}
+.fdl-logo{
+  font-family:var(--font1);font-size:2rem;font-weight:900;
+  color:var(--cyan);text-shadow:0 0 22px rgba(0,229,255,.8),0 0 44px rgba(0,229,255,.3);
+  line-height:1;margin-bottom:6px;
+}
+.fdl-logo .fbeta{font-size:1rem;color:var(--pink);text-shadow:0 0 12px var(--pink);vertical-align:super}
+.fdl-sub{font-size:.85rem;color:var(--muted)}
+/* Auth guard */
+.auth-guard{
+  text-align:center;padding:72px 28px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
+}
+.ag-ico{font-size:3rem;margin-bottom:14px}
+.ag-ttl{font-family:var(--font1);font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.ag-txt{color:var(--muted);margin-bottom:24px;font-size:.88rem;line-height:1.7}
+.ag-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* Dashboard */
+.dash{display:flex;flex-direction:column;gap:26px}
+/* Tabs */
+.up-tabs{
+  display:flex;gap:2px;padding:3px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;width:fit-content;margin-bottom:20px;
+}
+.utab{
+  padding:8px 22px;border-radius:8px;font-size:.8rem;font-weight:600;
+  color:var(--muted);cursor:pointer;border:none;background:transparent;
+  transition:all var(--t) var(--ease);
+}
+.utab.on{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+/* Dropzone */
+.dz{
+  border:2px dashed var(--border);border-radius:var(--r2);
+  padding:52px 32px;text-align:center;position:relative;
+  cursor:pointer;background:var(--card);transition:all var(--t) var(--ease);
+}
+.dz:hover,.dz.drag{
+  border-color:var(--cyan);background:var(--cyan3);
+  box-shadow:0 0 30px rgba(0,229,255,.1),inset 0 0 30px rgba(0,229,255,.03);
+}
+.dz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-ico{font-size:2.8rem;display:block;margin-bottom:14px;animation:dz-float 3s ease-in-out infinite}
+@keyframes dz-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.dz h3{font-size:1rem;font-weight:600;margin-bottom:6px}
+.dz p{font-size:.81rem;color:var(--muted);margin-bottom:16px}
+/* Progress */
+.uprog{display:none;margin-top:14px}
+.uprog.show{display:block}
+.pb-wrap{background:var(--bg2);border-radius:10px;height:4px;overflow:hidden;margin:6px 0}
+.pb{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:10px;width:0;transition:width .2s ease;box-shadow:0 0 8px var(--cyan)}
+.pb-lbl{font-size:.74rem;color:var(--muted);text-align:center}
+/* Pw set */
+.pw-set{display:none;margin-top:16px;text-align:left}
+.pw-set label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px}
+.pw-set-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.pw-set-row .field{flex:1;min-width:180px}
+/* File grid */
+.fl-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.fl-hdr h3{font-family:var(--font1);font-size:.9rem;font-weight:600}
+.fl-badge{
+  font-size:.72rem;color:var(--muted);background:var(--card);
+  padding:3px 12px;border-radius:20px;border:1px solid var(--border);
+}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px}
+.fc{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;position:relative;overflow:hidden;transition:all var(--t) var(--ease);
+}
+.fc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple));opacity:0;
+  transition:opacity var(--t) var(--ease);
+}
+.fc:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,0,0,.28)}
+.fc:hover::before{opacity:1}
+.fc-lock{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.66rem;color:var(--pink);background:var(--pink2);
+  padding:2px 7px;border-radius:4px;margin-bottom:9px;
+}
+.fc-ico{font-size:1.8rem;display:block;margin-bottom:9px}
+.fc-nm{font-weight:600;font-size:.85rem;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc-meta{display:flex;gap:10px;font-size:.7rem;color:var(--muted);margin-bottom:13px;flex-wrap:wrap}
+.fc-acts{display:flex;gap:6px}
+.fca{
+  flex:1;padding:6px 5px;border:1px solid var(--border);border-radius:6px;
+  font-size:.69rem;color:var(--muted);background:transparent;cursor:pointer;
+  transition:all var(--t) var(--ease);text-align:center;white-space:nowrap;
+}
+.fca:hover{border-color:var(--cyan);color:var(--cyan)}
+.fca.del:hover{border-color:var(--pink);color:var(--pink)}
+.empty-st{text-align:center;padding:56px;color:var(--muted);grid-column:1/-1}
+.empty-st .ei{font-size:2.8rem;margin-bottom:10px;opacity:.35}
+
+/* ═══════════════════════════════════════════════════════════
+   FILE VIEW PAGE
+═══════════════════════════════════════════════════════════ */
+.fv-wrap{max-width:660px;margin:0 auto;padding:56px 22px}
+.fv-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.fv-top{
+  background:linear-gradient(135deg,var(--bg2),var(--bg3));
+  padding:26px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;
+}
+.fv-ico{font-size:2.8rem}
+.fv-info h2{font-size:1.05rem;font-weight:700;margin-bottom:6px;word-break:break-all}
+.fv-meta{display:flex;gap:12px;font-size:.72rem;color:var(--muted);flex-wrap:wrap}
+.fv-body{padding:26px}
+.fv-prev{
+  margin-bottom:20px;border-radius:var(--r);overflow:hidden;
+  background:var(--bg2);display:flex;align-items:center;justify-content:center;min-height:100px;
+}
+.fv-prev img,.fv-prev video{max-width:100%;max-height:360px;object-fit:contain}
+.fv-noprev{padding:40px;text-align:center;color:var(--muted)}
+.fv-noprev .ni{font-size:3.5rem;margin-bottom:8px}
+/* Lock screen */
+.fv-lock{text-align:center;padding:36px 22px}
+.fv-lock .li{font-size:3.5rem;margin-bottom:12px;color:var(--pink);text-shadow:0 0 22px rgba(247,37,133,.5)}
+.fv-lock h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+.fv-lock p{color:var(--muted);margin-bottom:20px;font-size:.85rem}
+.fv-lock-form{display:flex;flex-direction:column;gap:9px;max-width:260px;margin:0 auto}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════════════════════ */
+.cg{display:grid;grid-template-columns:1fr 1.55fr;gap:52px;align-items:start}
+.ci h3{font-family:var(--font1);font-size:1.35rem;font-weight:700;margin-bottom:16px}
+.ci h3 span{color:var(--cyan)}
+.ci p{color:var(--muted);line-height:1.85;margin-bottom:26px;font-size:.86rem}
+.ci-items{display:flex;flex-direction:column;gap:11px}
+.cii{
+  display:flex;align-items:center;gap:13px;padding:13px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  transition:all var(--t) var(--ease);
+}
+.cii:hover{border-color:rgba(0,229,255,.2);box-shadow:0 0 14px rgba(0,229,255,.07)}
+.cii-ico{
+  width:40px;height:40px;background:var(--cyan2);border:1px solid var(--cyan);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;flex-shrink:0;
+}
+.cii-tx{display:flex;flex-direction:column;gap:2px}
+.cii-l{font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.cii-v{font-size:.85rem;font-weight:500}
+.cf{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:32px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf-ok{text-align:center;padding:40px;display:none}
+.cf-ok.show{display:block}
+.cf-ok-ico{font-size:2.8rem;color:var(--green);margin-bottom:10px;text-shadow:0 0 18px rgba(57,255,20,.5)}
+.cf-ok h3{font-size:1.05rem;font-weight:600;margin-bottom:6px}
+.cf-ok p{color:var(--muted);font-size:.87rem}
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════════ */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:52px 22px 22px;position:relative;z-index:1;
+}
+.fg{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:36px;margin-bottom:38px}
+.ft-brand h3{font-family:var(--font1);font-size:1rem;margin-bottom:10px}
+.ft-brand h3 .c1{color:var(--cyan)}.ft-brand h3 .c2{color:var(--purple)}
+.ft-brand p{font-size:.8rem;color:var(--muted);line-height:1.78;margin-bottom:16px}
+.ftc h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:12px}
+.ftc ul{display:flex;flex-direction:column;gap:8px}
+.ftc ul li a{font-size:.8rem;color:var(--muted);transition:color var(--t) var(--ease);cursor:pointer}
+.ftc ul li a:hover{color:var(--cyan)}
+.ft-bottom{
+  max-width:1160px;margin:0 auto;padding-top:20px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.ft-copy{font-size:.72rem;color:var(--muted)}
+.ft-copy span{color:var(--purple)}
+.ft-soc{display:flex;gap:8px}
+
+/* ═══════════════════════════════════════════════════════════
+   MODALS
+═══════════════════════════════════════════════════════════ */
+.modal-bg{
+  position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.84);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:18px;
+  opacity:0;pointer-events:none;transition:opacity .26s var(--ease);
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);
+  width:100%;max-width:390px;padding:34px;position:relative;
+  transform:scale(.96) translateY(12px);transition:transform .26s var(--ease);
+}
+.modal-bg.open .modal{transform:scale(1) translateY(0)}
+.modal-x{
+  position:absolute;top:13px;right:13px;width:28px;height:28px;
+  border:1px solid var(--border);border-radius:50%;background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;cursor:pointer;color:var(--muted);transition:all var(--t) var(--ease);
+}
+.modal-x:hover{border-color:var(--pink);color:var(--pink)}
+.modal-h{margin-bottom:22px}
+.modal-h h2{font-family:var(--font1);font-size:1.3rem;font-weight:700;margin-bottom:5px}
+.modal-h h2 span{color:var(--cyan)}
+.modal-h p{font-size:.8rem;color:var(--muted)}
+.divider{
+  display:flex;align-items:center;gap:9px;margin:15px 0;
+  color:var(--muted);font-size:.72rem;
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-google{
+  width:100%;padding:10px;border:1px solid var(--border2);border-radius:var(--r);
+  background:var(--card2);color:var(--text);font-size:.85rem;font-weight:500;
+  cursor:pointer;transition:all var(--t) var(--ease);margin-bottom:15px;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+}
+.btn-google:hover{border-color:var(--cyan);background:var(--cyan2)}
+.g-ico{
+  width:18px;height:18px;border-radius:50%;
+  background:conic-gradient(#ea4335 25%,#fbbc04 25% 50%,#34a853 50% 75%,#4285f4 75%);
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#fff;flex-shrink:0;
+}
+.modal-ft{text-align:center;margin-top:16px;font-size:.79rem;color:var(--muted)}
+.modal-ft a{color:var(--cyan);cursor:pointer;transition:all var(--t) var(--ease)}
+.modal-ft a:hover{text-shadow:0 0 8px rgba(0,229,255,.5)}
+/* Strength meter */
+.pwstr{margin-top:6px}
+.str-bars{display:flex;gap:3px;margin-bottom:3px}
+.sb{flex:1;height:3px;background:var(--border);border-radius:2px;transition:background var(--t) var(--ease)}
+.str-lbl{font-size:.68rem;color:var(--muted)}
+
+/* ═══════════════════════════════════════════════════════════
+   TOASTS
+═══════════════════════════════════════════════════════════ */
+#toasts{
+  position:fixed;top:80px;right:16px;z-index:2000;
+  display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:320px;
+}
+.toast{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);
+  padding:11px 14px;display:flex;align-items:flex-start;gap:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,.45);pointer-events:all;
+  animation:tin .28s var(--ease) both,tout .28s var(--ease) 3.7s both;
+}
+.toast.success{border-color:rgba(57,255,20,.25)}
+.toast.error  {border-color:rgba(247,37,133,.25)}
+.toast.info   {border-color:rgba(0,229,255,.25)}
+.toast.warn   {border-color:rgba(255,165,0,.25)}
+.ti{font-size:.95rem;flex-shrink:0;margin-top:1px}
+.tb .tt{font-size:.8rem;font-weight:600;margin-bottom:1px}
+.tb .tm{font-size:.73rem;color:var(--muted)}
+@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tout{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(16px)}}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════ */
+@media(max-width:1040px){
+  .fg{grid-template-columns:1fr 1fr;gap:24px}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .about-img-wrap{max-width:280px;margin:0 auto}
+}
+@media(max-width:768px){
+  .burger{display:flex}
+  .nav-right{display:none}
+  .nav-links{
+    position:fixed;top:var(--nav);left:0;right:0;z-index:799;
+    background:rgba(5,7,15,.95);backdrop-filter:blur(22px);
+    border-bottom:1px solid var(--border);
+    flex-direction:column;align-items:stretch;padding:14px;gap:2px;
+    transform:translateY(-110%);opacity:0;pointer-events:none;
+    transition:all .3s var(--ease);
+  }
+  .nav-links.open{transform:translateY(0);opacity:1;pointer-events:all}
+  .nl{padding:10px 14px}
+  .gal-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .cg{grid-template-columns:1fr}
+  .cf-row{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr}
+  .lb-p{left:-6px}.lb-n{right:-6px}
+  .hero-cta{flex-direction:column;align-items:center}
+  .btn-primary,.btn-outline{width:100%;text-align:center}
+}
+@media(max-width:480px){
+  .gal-grid{grid-template-columns:1fr}
+  .hero-stats{gap:14px}
+  .hs-div{height:26px}
+  .wrap{padding:0 14px}
+  .sec{padding:64px 0}
+}
+</style>
+</head>
+<body>
+
+<div id="backdrop" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <div class="brand" onclick="go('home')" role="link" tabindex="0" aria-label="Go to home">
+      <span class="b-fire">FireDL<span class="b-beta">[Beta]</span></span>
+      <span class="b-plus">+</span>
+      <span class="b-glow">Glowtham</span>
+      <span class="b-by">by DevNameGelo</span>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <span class="nl" data-r="home"      tabindex="0" role="link">Home</span>
+      <span class="nl" data-r="about"     tabindex="0" role="link">About</span>
+      <span class="nl" data-r="gallery"   tabindex="0" role="link">Gallery</span>
+      <span class="nl" data-r="fileshare" tabindex="0" role="link">File Share</span>
+      <span class="nl" data-r="contact"   tabindex="0" role="link">Contact</span>
+    </div>
+
+    <div class="nav-right">
+      <button class="btn-ghost" id="navSI" aria-label="Sign In">Sign In</button>
+      <button class="btn-glow"  id="navSU" aria-label="Sign Up"><span>Sign Up</span></button>
+      <div id="userPill" role="status" aria-label="Logged in user">
+        <span id="uname" class="uname"></span>
+        <button class="btn-sm" id="navSO" aria-label="Sign Out" title="Sign Out">↪</button>
+      </div>
+    </div>
+
+    <button class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGES
+═══════════════════════════════════════════════════════════ -->
+<main id="root">
+
+<!-- ── HOME ──────────────────────────────────────────────── -->
+<div class="page" id="pg-home" aria-label="Home">
+  <div class="hero">
+    <div class="orbs" aria-hidden="true">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <div class="hero-body">
+      <div class="hero-badge">
+        <span>✦</span><span>Photography &amp; File Hosting</span><span>✦</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="gc">Capturing</span> <span class="gp">Moments,</span><br>
+        <span class="gpk">Creating</span> <span class="gc">Memories</span>
+      </h1>
+      <p class="hero-sub">
+        A dual platform — <strong>Glowtham's</strong> professional photography portfolio
+        meets <strong>FireDL[Beta]</strong>, the clean modern file sharing tool.
+        All built by DevNameGelo.
+      </p>
+      <div class="hero-cta">
+        <span class="btn-primary" onclick="go('gallery')" role="button" tabindex="0">View Gallery</span>
+        <span class="btn-outline" onclick="go('fileshare')" role="button" tabindex="0">Share Files</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><span class="hs-n">500+</span><span class="hs-l">Photos</span></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-n">∞</span><span class="hs-l">Sharing</span></div>
+        <div class="hs-div"></div>
+        <div class="hs"><span class="hs-n">5★</span><span class="hs-l">Rated</span></div>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span class="sh-txt">Scroll</span>
+      <div class="sh-arr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ABOUT ─────────────────────────────────────────────── -->
+<div class="page" id="pg-about" aria-label="About">
+  <section class="sec">
+    <div class="wrap">
+      <div class="shd">
+        <div class="stag">✦ About Glowtham ✦</div>
+        <h2 class="stit">The Story <span class="hl">Behind the Lens</span></h2>
+        <p class="ssub">Every frame tells a story. Every pixel holds an emotion.</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-img-wrap">
+          <div class="about-img-border" aria-hidden="true"></div>
+          <div class="about-img" role="img" aria-label="Glowtham photographer">
+            <div class="about-avatar">📷</div>
+          </div>
+          <div class="about-xp-badge">5+ Years Exp.</div>
+        </div>
+        <div class="about-txt">
+          <h2>Hi, I'm <span>Glowtham</span></h2>
+          <p>
+            Professional photographer based in the Philippines, specialising in capturing
+            the fleeting moments that define our most precious memories. My lens finds beauty in
+            the extraordinary hidden within the everyday — from golden-hour light washing over
+            city streets to the raw electricity of a live event.
+          </p>
+          <p>
+            With over five years crafting visuals across portraiture, landscape, and event
+            photography, I bring a distinctive aesthetic that blends technical precision with raw
+            emotional resonance. Every photograph should freeze time, evoke feeling, and tell
+            a truth words cannot express.
+          </p>
+          <p>
+            I also built <strong style="color:var(--cyan)">FireDL[Beta]</strong> — a modern
+            file-hosting platform for seamless, secure sharing.
+            Both projects reflect my passion for creating tools and art that genuinely serve people.
+          </p>
+          <div class="skills-wrap" role="list" aria-label="Skills">
+            <span class="skill" role="listitem">Portrait Photography</span>
+            <span class="skill" role="listitem">Landscape Photography</span>
+            <span class="skill" role="listitem">Event Coverage</span>
+            <span class="skill" role="listitem">Fine Art</span>
+            <span class="skill" role="listitem">Photo Editing</span>
+            <span class="skill" role="listitem">Web Development</span>
+            <span class="skill" role="listitem">UI / UX Design</span>
+          </div>
+          <div class="socials" role="list" aria-label="Social links">
+            <a href="#" class="soc" title="Instagram" aria-label="Instagram" role="listitem">📸</a>
+            <a href="#" class="soc" title="Twitter"   aria-label="Twitter"   role="listitem">𝕏</a>
+            <a href="#" class="soc" title="GitHub"    aria-label="GitHub"    role="listitem">⌨</a>
+            <a href="#" class="soc" title="YouTube"   aria-label="YouTube"   role="listitem">▶</a>
+            <span class="soc" onclick="go('contact')" title="Email" aria-label="Contact" role="listitem" tabindex="0" style="cursor:pointer">✉</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ── GALLERY ───────────────────────────────────────────── -->
+<div class="page" id="pg-gallery" aria-label="Photo Gallery">
+  <section class="sec">
+    <div class="wrap">
+      <div class="shd">
+        <div class="stag">✦ Portfolio ✦</div>
+        <h2 class="stit">Photo <span class="hl">Gallery</span></h2>
+        <p class="ssub">A curated collection of moments frozen in light and shadow.</p>
+      </div>
+      <div class="gal-filters" id="galFilters" role="group" aria-label="Gallery category filters"></div>
+      <div class="gal-grid" id="galGrid" role="list" aria-label="Gallery images"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ── FILE SHARE ────────────────────────────────────────── -->
+<div class="page" id="pg-fileshare" aria-label="FireDL File Share">
+  <section class="sec">
+    <div class="wrap">
+      <div class="fdl-hdr">
+        <div class="fdl-logo">FireDL<span class="fbeta">[Beta]</span></div>
+        <div class="fdl-sub">Upload · Share · Manage — Powered by IndexedDB · by DevNameGelo</div>
+      </div>
+      <div id="fdlContent"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ── FILE VIEW ─────────────────────────────────────────── -->
+<div class="page" id="pg-file" aria-label="File View">
+  <div class="fv-wrap" id="fvContent"></div>
+</div>
+
+<!-- ── CONTACT ───────────────────────────────────────────── -->
+<div class="page" id="pg-contact" aria-label="Contact">
+  <section class="sec">
+    <div class="wrap">
+      <div class="shd">
+        <div class="stag">✦ Get In Touch ✦</div>
+        <h2 class="stit">Contact <span class="hl">Glowtham</span></h2>
+        <p class="ssub">Have a project in mind? Let's create something memorable.</p>
+      </div>
+      <div class="cg">
+        <div class="ci">
+          <h3>Let's Create <span>Together</span></h3>
+          <p>
+            Whether you need photography coverage for your event, a portrait session,
+            or simply want to share files securely — I'm here to help.
+            Reach out through any channel below or fill in the form.
+          </p>
+          <div class="ci-items">
+            <div class="cii">
+              <div class="cii-ico" aria-hidden="true">✉</div>
+              <div class="cii-tx">
+                <span class="cii-l">Email</span>
+                <span class="cii-v">hello@glowtham.dev</span>
+              </div>
+            </div>
+            <div class="cii">
+              <div class="cii-ico" aria-hidden="true">📞</div>
+              <div class="cii-tx">
+                <span class="cii-l">Phone</span>
+                <span class="cii-v">+63 912 345 6789</span>
+              </div>
+            </div>
+            <div class="cii">
+              <div class="cii-ico" aria-hidden="true">📍</div>
+              <div class="cii-tx">
+                <span class="cii-l">Location</span>
+                <span class="cii-v">Philippines 🇵🇭</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cf" id="cfWrap">
+          <form id="cfForm" novalidate autocomplete="off">
+            <div class="cf-row">
+              <div class="fgrp">
+                <label for="cfN">Name <span class="req">*</span></label>
+                <input type="text" id="cfN" class="field" placeholder="Your name" autocomplete="name">
+                <span class="errtxt" id="cfNE">Name is required.</span>
+              </div>
+              <div class="fgrp">
+                <label for="cfE">Email <span class="req">*</span></label>
+                <input type="email" id="cfE" class="field" placeholder="you@email.com" autocomplete="email">
+                <span class="errtxt" id="cfEE">Valid email required.</span>
+              </div>
+            </div>
+            <div class="fgrp">
+              <label for="cfS">Subject <span class="req">*</span></label>
+              <input type="text" id="cfS" class="field" placeholder="What's this about?">
+              <span class="errtxt" id="cfSE">Subject is required.</span>
+            </div>
+            <div class="fgrp">
+              <label for="cfM">Message <span class="req">*</span></label>
+              <textarea id="cfM" class="field" placeholder="Tell me about your project..."></textarea>
+              <span class="errtxt" id="cfME">Message must be at least 10 characters.</span>
+            </div>
+            <button type="submit" class="btn-block" id="cfBtn">
+              <span id="cfBT">Send Message ✦</span>
+            </button>
+          </form>
+          <div class="cf-ok" id="cfOk">
+            <div class="cf-ok-ico">✓</div>
+            <h3>Message Sent!</h3>
+            <p>Thank you for reaching out. I'll get back to you soon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="fg">
+    <div class="ft-brand">
+      <h3><span class="c1">FireDL[Beta]</span> + <span class="c2">Glowtham</span></h3>
+      <p>A dual-purpose platform combining professional photography with modern, secure file hosting. Crafted with ❤ by DevNameGelo.</p>
+      <div class="socials">
+        <a href="#" class="soc" style="width:36px;height:36px;font-size:.9rem" aria-label="Instagram">📸</a>
+        <a href="#" class="soc" style="width:36px;height:36px;font-size:.9rem" aria-label="GitHub">⌨</a>
+        <a href="#" class="soc" style="width:36px;height:36px;font-size:.9rem" aria-label="Twitter">𝕏</a>
+      </div>
+    </div>
+    <div class="ftc">
+      <h4>Portfolio</h4>
+      <ul>
+        <li><a onclick="go('home')">Home</a></li>
+        <li><a onclick="go('about')">About</a></li>
+        <li><a onclick="go('gallery')">Gallery</a></li>
+        <li><a onclick="go('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div class="ftc">
+      <h4>FireDL</h4>
+      <ul>
+        <li><a onclick="go('fileshare')">Dashboard</a></li>
+        <li><a id="ftSU">Sign Up</a></li>
+        <li><a id="ftSI">Sign In</a></li>
+      </ul>
+    </div>
+    <div class="ftc">
+      <h4>Info</h4>
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Browser Compat</a></li>
+        <li><a href="#">GitHub Repo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <p class="ft-copy">© 2026 <span>Glowtham</span>. All rights reserved. Built by DevNameGelo.</p>
+    <div class="ft-soc">
+      <a href="#" class="soc" style="width:32px;height:32px;font-size:.82rem" aria-label="GitHub">⌨</a>
+      <a href="#" class="soc" style="width:32px;height:32px;font-size:.82rem" aria-label="Instagram">📸</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════════════════ -->
+
+<!-- Sign In -->
+<div class="modal-bg" id="siMod" role="dialog" aria-modal="true" aria-labelledby="siTit">
+  <div class="modal">
+    <button class="modal-x" onclick="closeMod('siMod')" aria-label="Close">✕</button>
+    <div class="modal-h">
+      <h2 id="siTit">Sign <span>In</span></h2>
+      <p>Welcome back to FireDL[Beta]</p>
+    </div>
+    <button class="btn-google" id="siGoogle">
+      <i class="g-ico"></i> Continue with Google
+    </button>
+    <div class="divider">or use email</div>
+    <form id="siForm" novalidate>
+      <div class="fgrp">
+        <label for="siEm">Email</label>
+        <input type="email" id="siEm" class="field" placeholder="you@email.com" autocomplete="email">
+        <span class="errtxt" id="siEmE">Valid email required.</span>
+      </div>
+      <div class="fgrp" style="margin-bottom:18px">
+        <label for="siPw">Password</label>
+        <input type="password" id="siPw" class="field" placeholder="••••••••" autocomplete="current-password">
+        <span class="errtxt" id="siPwE">Password required.</span>
+      </div>
+      <button type="submit" class="btn-block" id="siBtn"><span id="siBT">Sign In</span></button>
+    </form>
+    <div class="modal-ft">No account? <a onclick="switchMod('siMod','suMod')">Sign Up</a></div>
+  </div>
+</div>
+
+<!-- Sign Up -->
+<div class="modal-bg" id="suMod" role="dialog" aria-modal="true" aria-labelledby="suTit">
+  <div class="modal">
+    <button class="modal-x" onclick="closeMod('suMod')" aria-label="Close">✕</button>
+    <div class="modal-h">
+      <h2 id="suTit">Create <span>Account</span></h2>
+      <p>Join FireDL[Beta] and start sharing files</p>
+    </div>
+    <button class="btn-google" id="suGoogle">
+      <i class="g-ico"></i> Continue with Google
+    </button>
+    <div class="divider">or use email</div>
+    <form id="suForm" novalidate>
+      <div class="fgrp">
+        <label for="suNm">Display Name</label>
+        <input type="text" id="suNm" class="field" placeholder="Your name" autocomplete="name">
+        <span class="errtxt" id="suNmE">Name is required.</span>
+      </div>
+      <div class="fgrp">
+        <label for="suEm">Email</label>
+        <input type="email" id="suEm" class="field" placeholder="you@email.com" autocomplete="email">
+        <span class="errtxt" id="suEmE">Valid email required.</span>
+      </div>
+      <div class="fgrp" style="margin-bottom:18px">
+        <label for="suPw">Password</label>
+        <input type="password" id="suPw" class="field" placeholder="Min 8 characters" autocomplete="new-password">
+        <span class="errtxt" id="suPwE">Min 8 characters required.</span>
+        <div class="pwstr" id="pwStr" style="display:none">
+          <div class="str-bars">
+            <div class="sb" id="sb1"></div><div class="sb" id="sb2"></div>
+            <div class="sb" id="sb3"></div><div class="sb" id="sb4"></div>
+          </div>
+          <span class="str-lbl" id="strLbl">Weak</span>
+        </div>
+      </div>
+      <button type="submit" class="btn-block" id="suBtn"><span id="suBT">Create Account</span></button>
+    </form>
+    <div class="modal-ft">Have account? <a onclick="switchMod('suMod','siMod')">Sign In</a></div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lb-box">
+    <button class="lb-x" id="lbX" aria-label="Close">✕</button>
+    <button class="lb-nav lb-p" id="lbP" aria-label="Previous">‹</button>
+    <img class="lb-img" id="lbImg" src="" alt="" loading="lazy">
+    <p class="lb-cap" id="lbCap"></p>
+    <button class="lb-nav lb-n" id="lbN" aria-label="Next">›</button>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT — Complete Application
+═══════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ─────────────────────────────────────────────────────────────
+   GALLERY DATA
+───────────────────────────────────────────────────────────── */
+const GALLERY = [
+  {id:1,  title:'Golden Hour Silhouette', cat:'landscapes', emoji:'🌅',
+    src:'https://picsum.photos/seed/glt1/880/586',  thumb:'https://picsum.photos/seed/glt1/440/293'},
+  {id:2,  title:'Urban Portrait Study',   cat:'portraits',  emoji:'👤',
+    src:'https://picsum.photos/seed/glt2/880/586',  thumb:'https://picsum.photos/seed/glt2/440/293'},
+  {id:3,  title:'The Festival Crowd',     cat:'events',     emoji:'🎉',
+    src:'https://picsum.photos/seed/glt3/880/586',  thumb:'https://picsum.photos/seed/glt3/440/293'},
+  {id:4,  title:'Fractured Light',        cat:'abstract',   emoji:'✨',
+    src:'https://picsum.photos/seed/glt4/880/586',  thumb:'https://picsum.photos/seed/glt4/440/293'},
+  {id:5,  title:'Mountain Mirage',        cat:'landscapes', emoji:'⛰️',
+    src:'https://picsum.photos/seed/glt5/880/586',  thumb:'https://picsum.photos/seed/glt5/440/293'},
+  {id:6,  title:'Quiet Contemplation',    cat:'portraits',  emoji:'🧘',
+    src:'https://picsum.photos/seed/glt6/880/586',  thumb:'https://picsum.photos/seed/glt6/440/293'},
+  {id:7,  title:'Night Market Glow',      cat:'events',     emoji:'🌃',
+    src:'https://picsum.photos/seed/glt7/880/586',  thumb:'https://picsum.photos/seed/glt7/440/293'},
+  {id:8,  title:'Prismatic Dreams',       cat:'abstract',   emoji:'🌈',
+    src:'https://picsum.photos/seed/glt8/880/586',  thumb:'https://picsum.photos/seed/glt8/440/293'},
+  {id:9,  title:'Ocean Horizon',          cat:'landscapes', emoji:'🌊',
+    src:'https://picsum.photos/seed/glt9/880/586',  thumb:'https://picsum.photos/seed/glt9/440/293'},
+  {id:10, title:'The Dreamer',            cat:'portraits',  emoji:'💭',
+    src:'https://picsum.photos/seed/glt10/880/586', thumb:'https://picsum.photos/seed/glt10/440/293'},
+  {id:11, title:'Stage Presence',         cat:'events',     emoji:'🎤',
+    src:'https://picsum.photos/seed/glt11/880/586', thumb:'https://picsum.photos/seed/glt11/440/293'},
+  {id:12, title:'Geometric Void',         cat:'abstract',   emoji:'🔷',
+    src:'https://picsum.photos/seed/glt12/880/586', thumb:'https://picsum.photos/seed/glt12/440/293'},
+];
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────────────────────── */
+// Sanitize a string for safe HTML insertion
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// Format bytes to readable string
+function fmtBytes(b) {
+  if (b === 0) return '0 B';
+  const u = ['B','KB','MB','GB'];
+  const i = Math.floor(Math.log(b) / Math.log(1024));
+  return (b / Math.pow(1024, i)).toFixed(i ? 1 : 0) + ' ' + u[i];
+}
+
+// Format date
+function fmtDate(ts) {
+  return new Date(ts).toLocaleDateString('en-PH', {month:'short',day:'numeric',year:'numeric'});
+}
+
+// Generate unique ID
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+// Email validation
+function validEmail(e) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
+}
+
+// Get file emoji by type
+function fileEmoji(name) {
+  const ext = (name || '').split('.').pop().toLowerCase();
+  const map = {
+    jpg:'🖼️', jpeg:'🖼️', png:'🖼️', gif:'🖼️', webp:'🖼️', svg:'🖼️', bmp:'🖼️',
+    mp4:'🎬', mov:'🎬', avi:'🎬', mkv:'🎬', webm:'🎬',
+    mp3:'🎵', wav:'🎵', ogg:'🎵', flac:'🎵',
+    pdf:'📄', doc:'📝', docx:'📝', txt:'📄', md:'📄',
+    zip:'📦', rar:'📦', '7z':'📦', tar:'📦', gz:'📦',
+    js:'💻', ts:'💻', html:'🌐', css:'🎨', py:'🐍',
+    xls:'📊', xlsx:'📊', csv:'📊',
+  };
+  return map[ext] || '📁';
+}
+
+// Check if file is previewable image
+function isImg(name) {
+  return /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(name || '');
+}
+function isVid(name) {
+  return /\.(mp4|mov|webm|ogv)$/i.test(name || '');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TOAST SYSTEM
+───────────────────────────────────────────────────────────── */
+const TOAST_ICONS = {success:'✅', error:'❌', info:'💡', warn:'⚠️'};
+function toast(type, title, msg = '') {
+  const c = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `
+    <span class="ti">${TOAST_ICONS[type]||'ℹ️'}</span>
+    <div class="tb">
+      <div class="tt">${esc(title)}</div>
+      ${msg ? `<div class="tm">${esc(msg)}</div>` : ''}
+    </div>`;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CRYPTO — SHA-256 via SubtleCrypto
+───────────────────────────────────────────────────────────── */
+async function sha256(msg) {
+  try {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  } catch {
+    // Fallback: djb2-based hash (not cryptographic, but graceful)
+    let h = 5381;
+    for (let i = 0; i < msg.length; i++) h = ((h << 5) + h) ^ msg.charCodeAt(i);
+    return (h >>> 0).toString(16).padStart(8,'0');
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   INDEXEDDB — File Storage
+───────────────────────────────────────────────────────────── */
+const DB = (() => {
+  let db = null;
+  const NAME = 'FireDL_v1', VER = 1, STORE = 'files';
+
+  function open() {
+    return new Promise((res, rej) => {
+      if (db) return res();
+      const req = indexedDB.open(NAME, VER);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        if (!d.objectStoreNames.contains(STORE))
+          d.createObjectStore(STORE, {keyPath:'id'});
+      };
+      req.onsuccess = e => { db = e.target.result; res(); };
+      req.onerror   = e => rej(e.target.error);
+    });
+  }
+
+  function tx(m) { return db.transaction([STORE], m).objectStore(STORE); }
+
+  return {
+    init:   () => open(),
+    put:    d  => open().then(() => new Promise((r,j) => {
+      const q = tx('readwrite').put(d); q.onsuccess = () => r(); q.onerror = () => j(q.error);
+    })),
+    get:    id => open().then(() => new Promise((r,j) => {
+      const q = tx('readonly').get(id); q.onsuccess = () => r(q.result||null); q.onerror = () => j(q.error);
+    })),
+    getAll: () => open().then(() => new Promise((r,j) => {
+      const q = tx('readonly').getAll(); q.onsuccess = () => r(q.result||[]); q.onerror = () => j(q.error);
+    })),
+    del:    id => open().then(() => new Promise((r,j) => {
+      const q = tx('readwrite').delete(id); q.onsuccess = () => r(); q.onerror = () => j(q.error);
+    })),
+  };
+})();
+
+/* ─────────────────────────────────────────────────────────────
+   AUTH — localStorage-based sessions
+───────────────────────────────────────────────────────────── */
+const Auth = (() => {
+  const ACCOUNTS_KEY = 'fdl_accounts_v2';
+  const SESSION_KEY  = 'fdl_session_v2';
+
+  function loadAccounts() {
+    try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveAccounts(a) {
+    localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(a));
+  }
+
+  return {
+    currentUser() {
+      try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+      catch { return null; }
+    },
+    async signUp(name, email, password) {
+      const accounts = loadAccounts();
+      if (accounts.find(a => a.email.toLowerCase() === email.toLowerCase()))
+        throw new Error('An account with this email already exists.');
+      const hash = await sha256(password);
+      const user = {id: uid(), name: name.trim(), email: email.toLowerCase().trim(), hash, created: Date.now()};
+      accounts.push(user);
+      saveAccounts(accounts);
+      localStorage.setItem(SESSION_KEY, JSON.stringify({id:user.id, name:user.name, email:user.email}));
+      return user;
+    },
+    async signIn(email, password) {
+      const accounts = loadAccounts();
+      const user = accounts.find(a => a.email.toLowerCase() === email.toLowerCase().trim());
+      if (!user) throw new Error('No account found with that email.');
+      const hash = await sha256(password);
+      if (hash !== user.hash) throw new Error('Incorrect password.');
+      localStorage.setItem(SESSION_KEY, JSON.stringify({id:user.id, name:user.name, email:user.email}));
+      return user;
+    },
+    googleSignIn() {
+      // Simulate Google OAuth — creates/retrieves a simulated account
+      const accounts = loadAccounts();
+      const email = 'user@gmail.com';
+      let user = accounts.find(a => a.email === email);
+      if (!user) {
+        user = {id: uid(), name: 'Google User', email, hash: '', created: Date.now(), google: true};
+        accounts.push(user);
+        saveAccounts(accounts);
+      }
+      localStorage.setItem(SESSION_KEY, JSON.stringify({id:user.id, name:user.name, email:user.email}));
+      return user;
+    },
+    signOut() {
+      localStorage.removeItem(SESSION_KEY);
+    },
+  };
+})();
+
+/* ─────────────────────────────────────────────────────────────
+   MODAL MANAGER
+───────────────────────────────────────────────────────────── */
+function openMod(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMod(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchMod(from, to) {
+  closeMod(from);
+  setTimeout(() => openMod(to), 150);
+}
+// Close modal on backdrop click
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => {
+    if (e.target === bg) closeMod(bg.id);
+  });
+});
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-bg.open').forEach(m => closeMod(m.id));
+    closeLB();
+  }
+});
+
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION STATE
+───────────────────────────────────────────────────────────── */
+function updateNavAuth() {
+  const u = Auth.currentUser();
+  const pill = document.getElementById('userPill');
+  const si   = document.getElementById('navSI');
+  const su   = document.getElementById('navSU');
+  if (u) {
+    pill.style.display = 'flex';
+    document.getElementById('uname').textContent = u.name;
+    si.style.display = 'none';
+    su.style.display = 'none';
+  } else {
+    pill.style.display = 'none';
+    si.style.display = '';
+    su.style.display = '';
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ROUTER
+───────────────────────────────────────────────────────────── */
+const PAGES = {
+  'home':      'pg-home',
+  'about':     'pg-about',
+  'gallery':   'pg-gallery',
+  'fileshare': 'pg-fileshare',
+  'file':      'pg-file',
+  'contact':   'pg-contact',
+};
+
+let currentPage = '';
+
+function go(route, param = '') {
+  const hash = param ? `#${route}/${param}` : `#${route}`;
+  window.location.hash = hash;
+}
+
+function renderPage(route, param) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  // Determine page key
+  const pgId = PAGES[route] || PAGES['home'];
+  const pgEl = document.getElementById(pgId);
+  if (!pgEl) return;
+
+  pgEl.classList.add('active');
+  currentPage = route;
+
+  // Update nav active link
+  document.querySelectorAll('.nl').forEach(l => {
+    l.classList.toggle('on', l.dataset.r === route);
+  });
+
+  // Close mobile menu
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('burger').classList.remove('open');
+  document.getElementById('burger').setAttribute('aria-expanded','false');
+
+  // Scroll to top
+  window.scrollTo({top:0, behavior:'instant'});
+
+  // Page-specific setup
+  if (route === 'gallery')   renderGallery('all');
+  if (route === 'fileshare') renderFDL();
+  if (route === 'file')      renderFileView(param);
+}
+
+function parseHash() {
+  const hash = window.location.hash.replace('#','') || 'home';
+  const parts = hash.split('/');
+  return {route: parts[0] || 'home', param: parts[1] || ''};
+}
+
+window.addEventListener('hashchange', () => {
+  const {route, param} = parseHash();
+  renderPage(route, param);
+});
+
+/* ─────────────────────────────────────────────────────────────
+   NAVBAR SCROLL SHADOW
+───────────────────────────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('shadowed', window.scrollY > 8);
+}, {passive:true});
+
+/* ─────────────────────────────────────────────────────────────
+   HAMBURGER
+───────────────────────────────────────────────────────────── */
+document.getElementById('burger').addEventListener('click', () => {
+  const b  = document.getElementById('burger');
+  const nl = document.getElementById('navLinks');
+  const open = nl.classList.toggle('open');
+  b.classList.toggle('open', open);
+  b.setAttribute('aria-expanded', open);
+});
+
+/* ─────────────────────────────────────────────────────────────
+   NAV LINK CLICKS
+───────────────────────────────────────────────────────────── */
+document.querySelectorAll('.nl').forEach(l => {
+  l.addEventListener('click',  () => go(l.dataset.r));
+  l.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') go(l.dataset.r); });
+});
+
+/* ─────────────────────────────────────────────────────────────
+   GALLERY
+───────────────────────────────────────────────────────────── */
+const CATS = ['all','portraits','landscapes','events','abstract'];
+let lbPhotos = [], lbIdx = 0;
+
+function renderGallery(filter = 'all') {
+  // Filters
+  const fc = document.getElementById('galFilters');
+  if (!fc.children.length) {
+    fc.innerHTML = CATS.map(c =>
+      `<button class="gf${c===filter?' on':''}" data-f="${c}">${c==='all'?'All':c[0].toUpperCase()+c.slice(1)}</button>`
+    ).join('');
+    fc.addEventListener('click', e => {
+      const btn = e.target.closest('.gf');
+      if (!btn) return;
+      fc.querySelectorAll('.gf').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      renderGalleryItems(btn.dataset.f);
+    });
+  }
+  renderGalleryItems(filter);
+}
+
+function renderGalleryItems(filter) {
+  const grid = document.getElementById('galGrid');
+  const photos = filter === 'all' ? GALLERY : GALLERY.filter(p => p.cat === filter);
+  lbPhotos = photos;
+
+  if (!photos.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)">No photos in this category.</div>`;
+    return;
+  }
+
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="gi" data-i="${i}" role="listitem" tabindex="0" aria-label="${esc(p.title)}">
+      <img src="${p.thumb}" alt="${esc(p.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="gi-ph" style="display:none">${p.emoji}<span>${esc(p.cat)}</span></div>
+      <div class="gi-overlay">
+        <div class="gi-info">
+          <h4>${esc(p.title)}</h4>
+          <span>${p.cat[0].toUpperCase()+p.cat.slice(1)}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  grid.querySelectorAll('.gi').forEach(el => {
+    el.addEventListener('click',   () => openLB(+el.dataset.i));
+    el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') openLB(+el.dataset.i); });
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LIGHTBOX
+───────────────────────────────────────────────────────────── */
+function openLB(idx) {
+  lbIdx = idx;
+  const p = lbPhotos[idx];
+  if (!p) return;
+  const el = document.getElementById('lb');
+  const img = document.getElementById('lbImg');
+  img.src = p.src;
+  img.alt = p.title;
+  document.getElementById('lbCap').textContent = `${p.title} — ${p.cat[0].toUpperCase()+p.cat.slice(1)}`;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbMove(dir) {
+  lbIdx = (lbIdx + dir + lbPhotos.length) % lbPhotos.length;
+  openLB(lbIdx);
+}
+document.getElementById('lbX').addEventListener('click', closeLB);
+document.getElementById('lbP').addEventListener('click', () => lbMove(-1));
+document.getElementById('lbN').addEventListener('click', () => lbMove(1));
+document.getElementById('lb').addEventListener('click', e => { if(e.target===e.currentTarget) closeLB(); });
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft')  lbMove(-1);
+  if (e.key === 'ArrowRight') lbMove(1);
+});
+
+/* ─────────────────────────────────────────────────────────────
+   FIREDL — Dashboard
+───────────────────────────────────────────────────────────── */
+async function renderFDL() {
+  const u = Auth.currentUser();
+  const el = document.getElementById('fdlContent');
+
+  if (!u) {
+    el.innerHTML = `
+      <div class="auth-guard">
+        <div class="ag-ico">🔒</div>
+        <div class="ag-ttl">Sign in to use FireDL[Beta]</div>
+        <p class="ag-txt">Upload, manage and share files securely.<br>Create a free account to get started.</p>
+        <div class="ag-btns">
+          <button class="btn-outline" onclick="openMod('siMod')">Sign In</button>
+          <button class="btn-primary" onclick="openMod('suMod')">Sign Up Free</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  let files = [];
+  try { files = await DB.getAll(); files = files.filter(f => f.owner === u.id); }
+  catch { toast('error','Storage Error','Could not load files.'); }
+
+  el.innerHTML = `
+    <div class="dash">
+      <!-- Upload area -->
+      <div>
+        <div class="up-tabs">
+          <button class="utab on" id="tab-free" onclick="switchTab('free')">Upload Free</button>
+          <button class="utab"    id="tab-prot" onclick="switchTab('prot')">Upload Protected 🔒</button>
+        </div>
+        <div id="panel-free">
+          ${dzHTML('free')}
+        </div>
+        <div id="panel-prot" style="display:none">
+          ${dzHTML('prot')}
+          <div class="pw-set" id="pw-set-prot">
+            <label>Set File Password</label>
+            <div class="pw-set-row">
+              <input type="password" id="protPw" class="field" placeholder="Enter password for this file" autocomplete="new-password">
+              <button class="btn-primary" onclick="triggerUpload('prot')" style="white-space:nowrap">Upload &amp; Protect</button>
+            </div>
+            <span class="errtxt" id="protPwE" style="margin-top:5px">Please enter a password.</span>
+          </div>
+        </div>
+        <div class="uprog" id="uprogWrap">
+          <div class="pb-wrap"><div class="pb" id="pb"></div></div>
+          <div class="pb-lbl" id="pbLbl">Uploading...</div>
+        </div>
+      </div>
+      <!-- File list -->
+      <div>
+        <div class="fl-hdr">
+          <h3>Your Files</h3>
+          <span class="fl-badge" id="fileCount">${files.length} file${files.length!==1?'s':''}</span>
+        </div>
+        <div class="fgrid" id="fgrid">
+          ${files.length ? files.map(renderFileCard).join('') : emptyState()}
+        </div>
+      </div>
+    </div>`;
+
+  // Bind dropzones
+  bindDZ('dz-free', 'free');
+  bindDZ('dz-prot', 'prot');
+}
+
+function dzHTML(mode) {
+  return `
+    <div class="dz" id="dz-${mode}" role="button" tabindex="0" aria-label="Upload area — drag or click to select file">
+      <input type="file" id="fi-${mode}" aria-hidden="true">
+      <span class="dz-ico">☁</span>
+      <h3>Drop your file here</h3>
+      <p>or click to browse</p>
+      <button class="btn-primary" onclick="triggerUpload('${mode}')" style="pointer-events:none;opacity:0.9">
+        ${mode==='free' ? 'Upload Free' : 'Choose File'}
+      </button>
+    </div>`;
+}
+
+function emptyState() {
+  return `<div class="empty-st"><div class="ei">📂</div><p>No files yet. Upload your first file above!</p></div>`;
+}
+
+function switchTab(tab) {
+  document.getElementById('panel-free').style.display = tab==='free' ? '' : 'none';
+  document.getElementById('panel-prot').style.display = tab==='prot' ? '' : 'none';
+  document.getElementById('tab-free').classList.toggle('on', tab==='free');
+  document.getElementById('tab-prot').classList.toggle('on', tab==='prot');
+}
+
+function bindDZ(dzId, mode) {
+  const dz = document.getElementById(dzId);
+  const fi = document.getElementById(`fi-${mode}`);
+  if (!dz || !fi) return;
+
+  // Click on dropzone triggers file input
+  dz.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+    fi.click();
+  });
+  dz.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') fi.click(); });
+
+  // Drag & drop
+  dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file, mode);
+  });
+
+  // File input change
+  fi.addEventListener('change', () => {
+    if (fi.files[0]) handleFile(fi.files[0], mode);
+    fi.value = '';
+  });
+}
+
+function triggerUpload(mode) {
+  document.getElementById(`fi-${mode}`).click();
+}
+
+async function handleFile(file, mode) {
+  if (!file) return;
+  if (file.size > 50 * 1024 * 1024) {
+    toast('error','File Too Large','Max file size is 50 MB.');
+    return;
+  }
+
+  const u = Auth.currentUser();
+  if (!u) { openMod('siMod'); return; }
+
+  // For protected upload, validate password first
+  let pwHash = null;
+  if (mode === 'prot') {
+    const pw = (document.getElementById('protPw')?.value || '').trim();
+    const pwE = document.getElementById('protPwE');
+    if (!pw) {
+      pwE?.classList.add('show');
+      return;
+    }
+    pwE?.classList.remove('show');
+    pwHash = await sha256(pw);
+  }
+
+  // Show progress
+  const progWrap = document.getElementById('uprogWrap');
+  const pb       = document.getElementById('pb');
+  const pbLbl    = document.getElementById('pbLbl');
+  if (progWrap) { progWrap.classList.add('show'); pb.style.width = '0%'; }
+
+  // Simulate incremental progress
+  let prog = 0;
+  const progInterval = setInterval(() => {
+    prog = Math.min(prog + Math.random() * 15 + 5, 90);
+    if (pb) pb.style.width = prog + '%';
+    if (pbLbl) pbLbl.textContent = `Uploading... ${Math.round(prog)}%`;
+  }, 120);
+
+  try {
+    // Read file as base64 DataURL for storage
+    const dataUrl = await readFileAsDataURL(file);
+
+    clearInterval(progInterval);
+    if (pb) pb.style.width = '100%';
+    if (pbLbl) pbLbl.textContent = 'Upload complete!';
+
+    const fileRecord = {
+      id:        uid(),
+      owner:     u.id,
+      name:      file.name,
+      size:      file.size,
+      type:      file.type,
+      dataUrl,
+      pwHash:    pwHash || null,
+      protected: !!pwHash,
+      uploaded:  Date.now(),
+    };
+
+    await DB.put(fileRecord);
+    toast('success', 'File Uploaded!', `${file.name} is ready to share.`);
+    if (document.getElementById('protPw')) document.getElementById('protPw').value = '';
+
+    setTimeout(() => {
+      if (progWrap) progWrap.classList.remove('show');
+      renderFDL(); // Refresh dashboard
+    }, 700);
+  } catch (err) {
+    clearInterval(progInterval);
+    if (progWrap) progWrap.classList.remove('show');
+    console.error('Upload error:', err);
+    toast('error', 'Upload Failed', err.message || 'Could not store file.');
+  }
+}
+
+function readFileAsDataURL(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = () => res(r.result);
+    r.onerror = () => rej(r.error);
+    r.readAsDataURL(file);
+  });
+}
+
+function renderFileCard(f) {
+  const link = `${location.origin}${location.pathname}#file/${f.id}`;
+  return `
+    <div class="fc" data-fid="${esc(f.id)}">
+      ${f.protected ? `<div class="fc-lock">🔒 Protected</div>` : ''}
+      <span class="fc-ico">${fileEmoji(f.name)}</span>
+      <div class="fc-nm" title="${esc(f.name)}">${esc(f.name)}</div>
+      <div class="fc-meta">
+        <span>${fmtBytes(f.size)}</span>
+        <span>${fmtDate(f.uploaded)}</span>
+      </div>
+      <div class="fc-acts">
+        <button class="fca" onclick="copyLink('${esc(f.id)}')" title="Copy shareable link">🔗 Copy</button>
+        <button class="fca" onclick="go('file','${esc(f.id)}')" title="View file">👁 View</button>
+        <button class="fca del" onclick="deleteFile('${esc(f.id)}')" title="Delete file">🗑 Del</button>
+      </div>
+    </div>`;
+}
+
+async function copyLink(id) {
+  const link = `${location.origin}${location.pathname}#file/${id}`;
+  try {
+    await navigator.clipboard.writeText(link);
+    toast('success','Link Copied!','Paste anywhere to share.');
+  } catch {
+    toast('info','Share Link', link);
+  }
+}
+
+async function deleteFile(id) {
+  if (!confirm('Delete this file permanently?')) return;
+  try {
+    await DB.del(id);
+    toast('success','Deleted','File removed.');
+    renderFDL();
+  } catch {
+    toast('error','Delete Failed','Please try again.');
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FILE VIEW PAGE
+───────────────────────────────────────────────────────────── */
+async function renderFileView(id) {
+  const el = document.getElementById('fvContent');
+  el.innerHTML = `<div style="text-align:center;padding:60px;color:var(--muted)">Loading file...</div>`;
+
+  if (!id) {
+    el.innerHTML = `<div style="text-align:center;padding:60px;color:var(--muted)">No file ID provided.</div>`;
+    return;
+  }
+
+  let file;
+  try { file = await DB.get(id); } catch { file = null; }
+
+  if (!file) {
+    el.innerHTML = `
+      <div class="fv-card">
+        <div style="text-align:center;padding:56px;">
+          <div style="font-size:3rem;margin-bottom:14px">🔍</div>
+          <h3 style="font-family:var(--font1);margin-bottom:8px">File Not Found</h3>
+          <p style="color:var(--muted);margin-bottom:22px">This file may have been deleted or the link is invalid.</p>
+          <span class="btn-primary" onclick="go('fileshare')" role="button" tabindex="0">Go to Dashboard</span>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (file.protected) {
+    renderFileLock(el, file);
+  } else {
+    renderFileContent(el, file);
+  }
+}
+
+function renderFileLock(el, file) {
+  el.innerHTML = `
+    <div class="fv-card">
+      <div class="fv-top">
+        <span class="fv-ico">${fileEmoji(file.name)}</span>
+        <div class="fv-info">
+          <h2>${esc(file.name)}</h2>
+          <div class="fv-meta">
+            <span>${fmtBytes(file.size)}</span>
+            <span>Uploaded ${fmtDate(file.uploaded)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="fv-body">
+        <div class="fv-lock">
+          <div class="li">🔒</div>
+          <h3>Password Protected</h3>
+          <p>This file is password-protected. Enter the password to access it.</p>
+          <div class="fv-lock-form">
+            <input type="password" id="fvPw" class="field" placeholder="Enter file password" autocomplete="off">
+            <span class="errtxt" id="fvPwE">Incorrect password.</span>
+            <button class="btn-block" id="fvUnlock" onclick="unlockFile('${esc(file.id)}')">
+              <span id="fvUBT">Unlock File 🔓</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Enter key on password input
+  document.getElementById('fvPw')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlockFile(file.id);
+  });
+}
+
+async function unlockFile(id) {
+  const pw = (document.getElementById('fvPw')?.value || '').trim();
+  const errEl = document.getElementById('fvPwE');
+  const btn   = document.getElementById('fvUnlock');
+  const btnTx = document.getElementById('fvUBT');
+  if (!pw) { errEl?.classList.add('show'); return; }
+
+  if (btn) { btn.disabled = true; if (btnTx) btnTx.textContent = 'Checking...'; }
+
+  try {
+    const file = await DB.get(id);
+    if (!file) { toast('error','File Gone','This file no longer exists.'); return; }
+    const hash = await sha256(pw);
+    if (hash !== file.pwHash) {
+      errEl?.classList.add('show');
+      if (btn) { btn.disabled = false; if (btnTx) btnTx.textContent = 'Unlock File 🔓'; }
+      return;
+    }
+    errEl?.classList.remove('show');
+    renderFileContent(document.getElementById('fvContent'), file);
+  } catch (err) {
+    toast('error','Error', err.message);
+    if (btn) { btn.disabled = false; if (btnTx) btnTx.textContent = 'Unlock File 🔓'; }
+  }
+}
+
+function renderFileContent(el, file) {
+  let preview = '';
+  if (isImg(file.name)) {
+    preview = `<div class="fv-prev"><img src="${file.dataUrl}" alt="${esc(file.name)}" loading="lazy"></div>`;
+  } else if (isVid(file.name)) {
+    preview = `<div class="fv-prev"><video controls preload="metadata" src="${file.dataUrl}"></video></div>`;
+  } else {
+    preview = `<div class="fv-prev"><div class="fv-noprev"><div class="ni">${fileEmoji(file.name)}</div><p>Preview not available for this file type.</p></div></div>`;
+  }
+
+  el.innerHTML = `
+    <div class="fv-card">
+      <div class="fv-top">
+        <span class="fv-ico">${fileEmoji(file.name)}</span>
+        <div class="fv-info">
+          <h2>${esc(file.name)}</h2>
+          <div class="fv-meta">
+            <span>${fmtBytes(file.size)}</span>
+            <span>Uploaded ${fmtDate(file.uploaded)}</span>
+            ${file.protected ? '<span style="color:var(--pink)">🔒 Protected</span>' : '<span style="color:var(--cyan)">🔓 Public</span>'}
+          </div>
+        </div>
+      </div>
+      <div class="fv-body">
+        ${preview}
+        <button class="btn-block" id="dlBtn">⬇ Download ${esc(file.name)}</button>
+      </div>
+    </div>`;
+
+  document.getElementById('dlBtn')?.addEventListener('click', () => downloadFile(file));
+}
+
+function downloadFile(file) {
+  const a = document.createElement('a');
+  a.href     = file.dataUrl;
+  a.download = file.name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast('success','Downloading','Your file is downloading...');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AUTH FORMS
+───────────────────────────────────────────────────────────── */
+// Sign In form
+document.getElementById('siForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const em = document.getElementById('siEm');
+  const pw = document.getElementById('siPw');
+  const emE = document.getElementById('siEmE');
+  const pwE = document.getElementById('siPwE');
+  const btn = document.getElementById('siBtn');
+  const bTx = document.getElementById('siBT');
+  let ok = true;
+
+  emE.classList.remove('show'); pwE.classList.remove('show');
+  em.classList.remove('bad');   pw.classList.remove('bad');
+
+  if (!validEmail(em.value)) { emE.classList.add('show'); em.classList.add('bad'); ok = false; }
+  if (!pw.value.trim())      { pwE.classList.add('show'); pw.classList.add('bad'); ok = false; }
+  if (!ok) return;
+
+  btn.disabled = true; bTx.textContent = 'Signing in...';
+  try {
+    await Auth.signIn(em.value, pw.value);
+    closeMod('siMod');
+    updateNavAuth();
+    toast('success','Welcome back!',`Signed in successfully.`);
+    em.value = ''; pw.value = '';
+    if (currentPage === 'fileshare') renderFDL();
+  } catch (err) {
+    toast('error','Sign In Failed', err.message);
+    pwE.textContent = err.message;
+    pwE.classList.add('show');
+    pw.classList.add('bad');
+  } finally {
+    btn.disabled = false; bTx.textContent = 'Sign In';
+  }
+});
+
+// Sign Up form
+document.getElementById('suForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const nm = document.getElementById('suNm');
+  const em = document.getElementById('suEm');
+  const pw = document.getElementById('suPw');
+  const nmE = document.getElementById('suNmE');
+  const emE = document.getElementById('suEmE');
+  const pwE = document.getElementById('suPwE');
+  const btn = document.getElementById('suBtn');
+  const bTx = document.getElementById('suBT');
+  let ok = true;
+
+  nmE.classList.remove('show'); emE.classList.remove('show'); pwE.classList.remove('show');
+  nm.classList.remove('bad');   em.classList.remove('bad');   pw.classList.remove('bad');
+
+  if (!nm.value.trim())      { nmE.classList.add('show'); nm.classList.add('bad'); ok = false; }
+  if (!validEmail(em.value)) { emE.classList.add('show'); em.classList.add('bad'); ok = false; }
+  if (pw.value.length < 8)   { pwE.classList.add('show'); pw.classList.add('bad'); ok = false; }
+  if (!ok) return;
+
+  btn.disabled = true; bTx.textContent = 'Creating account...';
+  try {
+    const user = await Auth.signUp(nm.value, em.value, pw.value);
+    closeMod('suMod');
+    updateNavAuth();
+    toast('success',`Welcome, ${user.name}!`,'Your account has been created.');
+    nm.value = ''; em.value = ''; pw.value = '';
+    document.getElementById('pwStr').style.display = 'none';
+    if (currentPage === 'fileshare') renderFDL();
+  } catch (err) {
+    toast('error','Sign Up Failed', err.message);
+    emE.textContent = err.message;
+    emE.classList.add('show');
+    em.classList.add('bad');
+  } finally {
+    btn.disabled = false; bTx.textContent = 'Create Account';
+  }
+});
+
+// Password strength meter
+document.getElementById('suPw').addEventListener('input', () => {
+  const pw  = document.getElementById('suPw').value;
+  const str = document.getElementById('pwStr');
+  const lbl = document.getElementById('strLbl');
+  if (!pw) { str.style.display = 'none'; return; }
+  str.style.display = 'block';
+  let score = 0;
+  if (pw.length >= 8)  score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const colors = ['var(--pink)','orange','var(--cyan)','var(--green)'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  ['sb1','sb2','sb3','sb4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.style.background = i < score ? colors[score-1] : 'var(--border)';
+  });
+  lbl.textContent = labels[score-1] || 'Weak';
+  lbl.style.color = colors[score-1] || 'var(--muted)';
+});
+
+// Google sign in simulation
+function handleGoogleSignIn() {
+  try {
+    const user = Auth.googleSignIn();
+    closeMod('siMod');
+    closeMod('suMod');
+    updateNavAuth();
+    toast('success',`Welcome, ${user.name}!`,'Signed in with Google.');
+    if (currentPage === 'fileshare') renderFDL();
+  } catch (err) {
+    toast('error','Google Sign In Failed', err.message);
+  }
+}
+document.getElementById('siGoogle').addEventListener('click', handleGoogleSignIn);
+document.getElementById('suGoogle').addEventListener('click', handleGoogleSignIn);
+
+// Sign out
+document.getElementById('navSO').addEventListener('click', () => {
+  Auth.signOut();
+  updateNavAuth();
+  toast('info','Signed out','Come back soon!');
+  if (currentPage === 'fileshare') renderFDL();
+});
+
+// Bind nav auth buttons
+document.getElementById('navSI').addEventListener('click', () => openMod('siMod'));
+document.getElementById('navSU').addEventListener('click', () => openMod('suMod'));
+document.getElementById('ftSU')?.addEventListener('click', () => openMod('suMod'));
+document.getElementById('ftSI')?.addEventListener('click', () => openMod('siMod'));
+
+/* ─────────────────────────────────────────────────────────────
+   CONTACT FORM
+───────────────────────────────────────────────────────────── */
+document.getElementById('cfForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const N = document.getElementById('cfN');
+  const E = document.getElementById('cfE');
+  const S = document.getElementById('cfS');
+  const M = document.getElementById('cfM');
+  const btn = document.getElementById('cfBtn');
+  const bTx = document.getElementById('cfBT');
+  let ok = true;
+
+  ['cfNE','cfEE','cfSE','cfME'].forEach(id => document.getElementById(id).classList.remove('show'));
+  [N,E,S,M].forEach(f => f.classList.remove('bad'));
+
+  if (!N.value.trim())    { document.getElementById('cfNE').classList.add('show'); N.classList.add('bad'); ok = false; }
+  if (!validEmail(E.value)){ document.getElementById('cfEE').classList.add('show'); E.classList.add('bad'); ok = false; }
+  if (!S.value.trim())    { document.getElementById('cfSE').classList.add('show'); S.classList.add('bad'); ok = false; }
+  if (M.value.trim().length < 10) { document.getElementById('cfME').classList.add('show'); M.classList.add('bad'); ok = false; }
+  if (!ok) return;
+
+  btn.disabled = true; bTx.textContent = 'Sending...';
+  // Simulate async submission
+  await new Promise(r => setTimeout(r, 1200));
+
+  // Store locally
+  try {
+    const msgs = JSON.parse(localStorage.getItem('glowtham_msgs') || '[]');
+    msgs.push({name:N.value, email:E.value, subject:S.value, message:M.value, ts:Date.now()});
+    localStorage.setItem('glowtham_msgs', JSON.stringify(msgs));
+  } catch {}
+
+  document.getElementById('cfForm').style.display = 'none';
+  document.getElementById('cfOk').classList.add('show');
+  toast('success','Message Sent!','I\'ll get back to you soon.');
+});
+
+/* ─────────────────────────────────────────────────────────────
+   KEYBOARD NAV — brand click
+───────────────────────────────────────────────────────────── */
+document.querySelector('.brand').addEventListener('keydown', e => {
+  if (e.key==='Enter'||e.key===' ') go('home');
+});
+
+/* ─────────────────────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────────────────────── */
+(async function init() {
+  // Init DB
+  try { await DB.init(); } catch (e) { console.warn('IndexedDB init failed:', e); }
+
+  // Update nav auth state
+  updateNavAuth();
+
+  // Render current route
+  const {route, param} = parseHash();
+  renderPage(route, param);
+})();
+</script>
+</body>
+</html>
